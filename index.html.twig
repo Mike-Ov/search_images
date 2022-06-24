@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Search images on website{% endblock %}</title>
+
+    {% block stylesheets %}
+        <style>
+            .grid {
+                border: 2px solid #edfd03;
+                display: grid;
+                grid-template-columns: 25% 25% 25% 25%;
+            }
+
+            .grid > * {
+                border: 2px solid #edfd03;
+                padding: 5px;
+                margin: 1px;
+            }
+            .image-block {
+                display: inline-block;
+                border: 2px solid #00f;
+            }
+            .image {
+                max-width: 100%;
+                display: block;
+            }
+            .block {
+                word-wrap: break-word;
+            }
+        </style>
+    {% endblock %}
+
+    {% block javascripts %}
+    {% endblock %}
+</head>
+
+
+{% block body %}
+    <div>
+        <form method="post">
+            <label>URL:
+              <input type="text" id="url" name="url">
+            </label>
+            <button type="submit" id="submit-button">Get images</button>
+        </form>
+    </div>
+    {% if images is defined %}
+            <div>Results: </div>
+            <div class="grid">
+               {% for image in images %}
+                   <div class="block">
+                       <div class="image-block" > <img class="image" src={{ image.data }} ></div>
+                       <div> {{ image.url }}</div>
+                       <div> {{ image.size }} byte</div>
+                   </div>
+               {% endfor %}
+            </div>
+            <div>On page search {{ images|length }} images. Size: {{ (filesSizeTotal/1000000)|round(3,'common') }} Mb</div>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+    {% if errors is defined %}
+        <div> Errors:</div>
+        {% for error in errors %}
+            <div> URL: {{ error['url'] }} <br> ERROR: {{ error['error'] }}</div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+</html>
